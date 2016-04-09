@@ -2,6 +2,11 @@ from flask import Flask
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 
+import sys
+sys.path.append("/modules")
+
+import tweepy
+
 app = Flask(__name__, static_folder='templates/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:st@localhost/test'
 db = SQLAlchemy(app)
