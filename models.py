@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.dialects.postgresql import JSON
-
+from sqlalchemy import ForeignKey
 
 '''
 Provider Table:
@@ -11,13 +11,13 @@ Provider Table:
 
 '''
 class Provider(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	provider_id = db.Column(db.Integer, primary_key=True)
 
 	name = db.Column(db.String(200))
 	is_hospital = db.Column(db.Boolean)
 
-	def __init__(self, id, name, is_hospital):
-		self.id = id
+	def __init__(self, provider_id, name, is_hospital):
+		self.provider_id = provider_id
 		self.name = name
 		self.is_hospital = is_hospital
 		
@@ -34,13 +34,13 @@ Diagnosis Table:
 
 '''
 class Diagnosis(db.Model):
-	procedure = db.Column(db.Integer, primary_key=True)
- 	provider_id = db.Column(db.Integer, ForeignKey("Provider.id"), primary_key=True)
+	procedure = db.Column(db.String(200), primary_key=True)
+	provider_id = db.Column(db.Integer, primary_key=True)
 
-	avg_total_payments = db.Column(db.Numeric(precision=2, asdecimal=True))
-	avg_medicare_payments = db.Column(db.Numeric(precision=2, asdecimal=True))
-	avg_covered_charges = db.Column(db.Numeric(precision=2, asdecimal=True))
-	total_discharge = db.Column(db.Numeric(precision=2, asdecimal=True))
+	avg_total_payments = db.Column(db.Numeric(precision=10, scale=2,  asdecimal=True))
+	avg_medicare_payments = db.Column(db.Numeric(precision=10, scale=2,  asdecimal=True))
+	avg_covered_charges = db.Column(db.Numeric(precision=10, scale=2, asdecimal=True))
+	total_discharge = db.Column(db.Numeric(precision=10, scale=2,  asdecimal=True))
 
 	def __init__(self, procedure, provider_id, avg_medicare_payments, avg_total_payments, 
 		avg_covered_charges, total_discharge):
@@ -63,15 +63,15 @@ Location Table:
 
 '''
 class Location(db.Model):
-	id = db.Column(db.Integer, ForeignKey("Provider.id"), primary_key=True)
+	provider_id = db.Column(db.Integer, primary_key=True)
 
 	city = db.Column(db.String(100))
 	street_address = db.Column(db.String(200))
 	state = db.Column(db.String(2))
 	zip_code = db.Column(db.Integer)
 
-	def __init__(self, id, city, street_address, state, zip_code):
-		self.id = id
+	def __init__(self, provider_id, city, street_address, state, zip_code):
+		self.provider_id = provider_id
 		self.city = city
 		self.street_address = street_address
 		self.state = state
