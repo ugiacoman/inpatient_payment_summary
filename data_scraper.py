@@ -41,10 +41,11 @@ def download_file(url):
 
 def runScripts(file):
 	csv_f = csv.reader(file)
-	writetoCSV_Provider(csv_f)
+	writetoCSV_Provider(csv_f)	
+	file.seek(0)
 	writetoCSV_Diagnosis(csv_f)
+	file.seek(0)
 	writetoCSV_Loc(csv_f)       
-	print("Finished.") 
 
 
 def main():
@@ -53,7 +54,6 @@ def main():
         f = open('Inpatient_Prospective_Payment_System__IPPS__Provider_Summary_for_the_Top_100_Diagnosis-Related_Groups__DRG__-_FY2011.csv', 'rb')
         print ('CSV found, generating separate CSV files for tables.')
         runScripts(f)
-        f.close()
     except IOError:
 		print ('CSV not found, downloading from source...')
 
@@ -61,8 +61,6 @@ def main():
 		file = download_file(url)
 		f = open(file, 'rb')
 		runScripts(f)
-		print("Finished.") 
-		f.close()
 
 main()
 
