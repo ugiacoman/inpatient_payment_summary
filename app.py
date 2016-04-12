@@ -3,20 +3,12 @@ from flask import render_template
 from flask_sqlalchemy  import *
 
 
-
-
-
 app = Flask(__name__, static_folder='templates/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:st@localhost/test'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-class Incident(db.Model):
-	incident_id = db.Column(db.Integer, primary_key=True)
-	type = db.Column(db.String(100))
-
-	def __init__(self, incident_id, type):
-		self.incident_id = incident_id
-		self.type = type
+from models import *
 
 @app.route("/")
 def index():

@@ -4,4 +4,5 @@ var map = new mapboxgl.Map({
           style: 'mapbox://styles/mapbox/dark-v8',
               zoom: 4,
                   center: [-98.873,39.213]
+                  // long, lat order
 });
