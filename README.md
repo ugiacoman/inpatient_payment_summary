@@ -11,10 +11,13 @@ Inpatient Prospective Payment System Provider Summary for Top 100 Diagnoses FY20
 
 ## How to Setup DB
 
-	1. First let's get our data by running `$ python datascraper.py`. This will download the data if you do not 
-	already have it and create the CSVs for our database tables. 
-	2. Next, run setup.py. This will create the database `mapbox_db`, create tables and populates them with the
-	data downloaded.
+1. First let's get our data by running `$ python datascraper.py`. This will download the data if you do not 
+already have it and create the CSVs for our database tables. 
+
+2. Let's create the database by running `$ createdb mapbox_db` 
+
+3. Next, run `$ python setup.py`. This will create tables and populates them with the
+data downloaded.
 
 
 ## PSQL Cheatsheet

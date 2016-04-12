@@ -14,22 +14,23 @@ def process_file(conn, table_name, file_object):
 	    DELIMITER AS ','
 	"""
 	cursor = conn.cursor()
+	print("Importing %s" % table_name)
 	cursor.copy_expert(sql=SQL_STATEMENT % table_name, file=file_object)
 	conn.commit()
 	cursor.close()
 
 
 def main():
-
-	conn = None
+	print("Creating Table Schemas")
 	db.create_all()
+	conn = None
 	#change to your own personal settings
 	conn = connect(dbname='mapbox_db', user='uli', password='st')
 
-	dbname = "mapbox_db"
+	conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 	cur = conn.cursor()
-	# cur.execute('CREATE DATABASE ' + dbname)
-
+	
+	print("Importing Data")
 	prov_file = open("Provider.csv")
 	loc_file = open("Location.csv")
 	diag_file = open("Diagnosis.csv")
