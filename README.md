@@ -1,12 +1,12 @@
-# Mapping Medical Procedure Costs all over the United States 
+# Mapping Medical Procedure Costs
 
 Inpatient Prospective Payment System Provider Summary for Top 100 Diagnoses FY2011
 
 
 ## Requirements
 
-	* Make sure to `pip install -r requirements.txt` to install reqs for app (If on db add `--user` flag)
-	* Postgres
+* Make sure to `pip install -r requirements.txt` to install reqs for app (If on db add `--user` flag)
+* Postgres
 
 
 ## How to Setup DB
@@ -16,8 +16,8 @@ already have it and create the CSVs for our database tables.
 
 2. Let's create the database by running `$ createdb mapbox_db` 
 
-3. Next, run `$ python setup.py`. This will create tables and populates them with the
-data downloaded.
+3. Next, run `$ python setup.py`. This will create tables and populate them with the
+data downloaded. Follow the onscreen instructions.
 
 
 ## PSQL Cheatsheet
