@@ -5,9 +5,9 @@ from sqlalchemy.dialects.postgresql import JSON
 '''
 Provider Table:
 
-	id: (Foreign key references id in Provider Table)
-	name:
-	is_hospital: Boolean
+	id: [Ex: 670068](Foreign key references id in Provider Table)
+	name: [Ex: SOUTHEAST ALABAMA MEDICAL CENTER]
+	is_hospital: Boolean [Ex: `0` or `1`]
 
 '''
 class Provider(db.Model):
@@ -25,7 +25,7 @@ class Provider(db.Model):
 '''
 Diagnosis Table:
 
-	procedure: 
+	procedure: [Ex: 039 - EXTRACRANIAL PROCEDURES W/O CC/MCC]
 	provider_id: (Foreign key references id in Provider Table)
 	avg_total_payments:
 	avg_medicare_payments:
