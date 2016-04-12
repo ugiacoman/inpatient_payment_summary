@@ -22,9 +22,9 @@ data downloaded.
 
 ## PSQL Cheatsheet
 
-	```sql
-	\l : List all dbs
-	\dt : List all tables in database
+```sql
+\l : List all dbs
+\dt : List all tables in database
 
 
-	```
+```
