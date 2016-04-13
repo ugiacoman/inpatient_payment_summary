@@ -1,6 +1,6 @@
 # Mapping Medical Procedure Costs
 
-Inpatient Prospective Payment System Provider Summary for Top 100 Diagnoses FY2011
+Medical costs in the U.S. vary from state to state. We took inpatient data from the top 100 diagnoses in 2011 and mapped the data.
 
 [Production Server](http://intense-mapbox.herokuapp.com)
 
@@ -27,7 +27,7 @@ already have it and create the CSVs for our database tables.
 
 ## PSQL Cheatsheet
 
-```sql
+```
 \l : List all dbs
 \dt : List all tables in database
 heroku pg:psql : pulls up live db on heroku
