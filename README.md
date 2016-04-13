@@ -28,6 +28,6 @@ already have it and create the CSVs for our database tables.
 ```sql
 \l : List all dbs
 \dt : List all tables in database
-
+heroku pg:psql : pulls up live db on heroku
 
 ```
