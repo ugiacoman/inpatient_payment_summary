@@ -2,6 +2,8 @@
 
 Inpatient Prospective Payment System Provider Summary for Top 100 Diagnoses FY2011
 
+[Production Server](http://intense-mapbox.herokuapp.com)
+
 
 ## Requirements
 
@@ -29,5 +31,6 @@ already have it and create the CSVs for our database tables.
 \l : List all dbs
 \dt : List all tables in database
 heroku pg:psql : pulls up live db on heroku
+heroku run python manage.py db upgrade --app intense-mapbox : after running local migrations, use remote upgrade
 
 ```
