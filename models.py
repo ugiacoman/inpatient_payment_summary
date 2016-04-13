@@ -20,6 +20,9 @@ class Provider(db.Model):
 		self.provider_id = provider_id
 		self.name = name
 		self.is_hospital = is_hospital
+
+	def __repr__(self):
+		return '<id {}>'.format(self.id)
 		
 
 '''

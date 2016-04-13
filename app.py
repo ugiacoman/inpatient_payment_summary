@@ -4,7 +4,7 @@ from flask_sqlalchemy  import *
 
 
 app = Flask(__name__, static_folder='templates/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://uli:st@localhost/mapbox_db'
+app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
