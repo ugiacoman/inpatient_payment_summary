@@ -28,6 +28,14 @@ def main():
 	password = getpass.getpass()
 	print("\nCreating Table Schemas")
 	db.create_all()
+
+	# then, load the Alembic configuration and generate the
+	# version table, "stamping" it with the most recent rev:
+	# from alembic.config import Config
+	# from alembic import command
+	# alembic_cfg = Config("/inpatient_payment_summary/migrations/alembic.ini")
+	# command.stamp(alembic_cfg, "head")
+
 	conn = None
 	#change to your own personal settings
 	conn = connect(dbname=dbname, user=user, password=password)
