@@ -16,8 +16,11 @@ already have it and create the CSVs for our database tables.
 
 2. Let's create the database by running `$ createdb mapbox_db` 
 
-3. Next, run `$ python setup.py`. This will create tables and populate them with the
-data downloaded. Follow the onscreen instructions.
+3. Next, run `$ python manage.py db migrate`. This will create tables with alembic migration control.
+
+4. Now, run `$ python manage.py db upgrade`. This will apply the changes.
+
+5. To add the data let's now run `$ python setup.py`. Then go through steps 3 and 4 again.
 
 
 ## PSQL Cheatsheet
