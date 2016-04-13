@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey
 '''
 Provider Table:
 
-	id: [Ex: 670068](Foreign key references id in Provider Table)
+	id: [Ex: 670068]
 	name: [Ex: SOUTHEAST ALABAMA MEDICAL CENTER]
 	is_hospital: Boolean [Ex: `0` or `1`]
 
@@ -38,7 +38,7 @@ Diagnosis Table:
 '''
 class Diagnosis(db.Model):
 	procedure = db.Column(db.String(200), primary_key=True)
-	provider_id = db.Column(db.Integer, primary_key=True)
+	provider_id = db.Column(db.Integer, db.ForeignKey('provider.provider_id'), primary_key=True)
 
 	avg_total_payments = db.Column(db.Numeric(precision=10, scale=2,  asdecimal=True))
 	avg_medicare_payments = db.Column(db.Numeric(precision=10, scale=2,  asdecimal=True))
