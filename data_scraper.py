@@ -13,25 +13,18 @@ def writetoCSV_Loc(csv_2011, csv_2012, csv_2013):
 	for col in csv_2011:
 		if (col[1].lstrip("0") not in container_1) and (len(col[1]) > 1):
 			container_1.append(col[1].lstrip("0"))
-			g = geocoder.google(col[3]+ "," + col[5])
-			print(g.latlng)
-			if len(g.latlng) > 1:
-				loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6],g.latlng[1], g.latlng[0]])
-				count += 1
-				print(count)
-				if (count % 100) == 0:
-					print(count)
+			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6], "-", "+"])
 
 	for col in csv_2012:
 		if (col[1].lstrip("0") not in container_1) and (len(col[1]) > 1):
 			container_1.append(col[1].lstrip("0"))
-			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6]])
+			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6], "-", "+"])
 
 	for col in csv_2013:
 		if (col[1].lstrip("0") not in container_1) and (len(col[1]) > 1):
 			container_1.append(col[1].lstrip("0"))
-			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6]])		
-
+			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6], "-", "+"])
+		
 def writetoCSV_Provider(csv_2011, csv_2012, csv_2013):
 	prov_csv = csv.writer(open("Provider.csv","wb"))
 	container = []
