@@ -24,6 +24,10 @@ already have it and create the CSVs for our database tables.
 
 5. To add the data let's now run `$ python setup.py`. Then go through steps 3 and 4 again.
 
+6. Run the following in the terminal
+	
+	`$ export DATABASE_URL="postgresql://<USERNAME>:<PASSWORD>@<DBNAME>/mapbox_db"`
+	`$ export APP_SETTINGS="config.DevelopmentConfig"`
 
 ## PSQL Cheatsheet
 
