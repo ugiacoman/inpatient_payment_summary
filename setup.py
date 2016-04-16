@@ -6,8 +6,14 @@ from app import db
 import getpass
 
 
-def process_file(conn, table_name, file_object):
+def delete(conn):
+	print("Deleting all data from diagnosis, provider, and location schemas.")
+	cursor = conn.cursor()
+	cursor.execute("DELETE FROM diagnosis; DELETE FROM provider; DELETE FROM location;")	
+	conn.commit()
+	cursor.close()
 
+def process_file(conn, table_name, file_object):
 	SQL_STATEMENT = """
 	COPY %s FROM STDIN WITH
 	    CSV
@@ -16,6 +22,7 @@ def process_file(conn, table_name, file_object):
 	"""
 	cursor = conn.cursor()
 	print("Importing %s" % table_name)
+
 	cursor.copy_expert(sql=SQL_STATEMENT % table_name, file=file_object)
 	conn.commit()
 	cursor.close()
@@ -38,9 +45,10 @@ def main():
 	loc_file = open("Location.csv")
 	diag_file = open("Diagnosis.csv")
 	try:
-	    process_file(conn, 'provider', prov_file)
-	    process_file(conn, 'location', loc_file)
-	    process_file(conn, 'diagnosis', diag_file)
+		delete(conn)
+		process_file(conn, 'provider', prov_file)
+		process_file(conn, 'location', loc_file)
+		process_file(conn, 'diagnosis', diag_file)
 	finally:
 	    conn.close()
 

@@ -73,8 +73,8 @@ class Location(db.Model):
 	street_address = db.Column(db.String(200))
 	state = db.Column(db.String(2))
 	zip_code = db.Column(db.Integer)
-	longtiude = db.Column(db.Numeric(precision=10, scale=8, asdecimal=True))
-	latitude = db.Column(db.Numeric(precision=10, scale=8, asdecimal=True))
+	longtiude = db.Column(db.Numeric(precision=12, scale=8, asdecimal=True))
+	latitude = db.Column(db.Numeric(precision=12, scale=8, asdecimal=True))
 
 	def __init__(self, provider_id, city, street_address, state, zip_code, longtiude, latitude):
 		self.provider_id = provider_id
