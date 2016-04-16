@@ -7,7 +7,7 @@ from datetime import datetime
 # 0:procedure, 1:id, 2:name, 3:street, 4:city, 5:state, 6:zip, 7:region, 8:totaldischarge, 9:covered, 10:total, 11:med
 
 def writetoCSV_Loc(csv_2011, csv_2012, csv_2013):
-	loc_csv = csv.writer(open("Location.csv","wb"))
+	loc_csv = csv.writer(open("Location.csv","wt"))
 	container_1 = []
 	count = 0
 	for col in csv_2011:
@@ -26,7 +26,7 @@ def writetoCSV_Loc(csv_2011, csv_2012, csv_2013):
 			loc_csv.writerow([col[1].lstrip("0"),col[4],col[3],col[5],col[6], "-", "+"])
 		
 def writetoCSV_Provider(csv_2011, csv_2012, csv_2013):
-	prov_csv = csv.writer(open("Provider.csv","wb"))
+	prov_csv = csv.writer(open("Provider.csv","wt"))
 	container = []
 	for col in csv_2011:
 		if col[1].lstrip("0") not in container:
@@ -57,7 +57,7 @@ def writetoCSV_Provider(csv_2011, csv_2012, csv_2013):
 				prov_csv.writerow([col[1].lstrip("0"),col[2], is_hospital])						
 
 def writetoCSV_Diagnosis(csv_2011, csv_2012, csv_2013):
-	diag_csv = csv.writer(open("Diagnosis.csv","wb"))
+	diag_csv = csv.writer(open("Diagnosis.csv","wt"))
 
 	for col in csv_2011:
 		if len(col[1]) > 1:
@@ -104,14 +104,14 @@ def runScripts(file_2011, file_2012, file_2013):
 
 
 def main():
-    try:
-    	print ('\nLooking for CSV...')
-        f_11 = open('source_2011.csv', 'rb')
-        f_12 = open('source_2012.csv', 'rb')
-        f_13 = open('source_2013.csv', 'rb')
-        print ('CSVs found, generating separate CSV files for tables.')
-        runScripts(f_11, f_12, f_13)
-    except IOError:
+	try:
+		print ('\nLooking for CSV...')
+		f_11 = open('source_2011.csv', 'rt')
+		f_12 = open('source_2012.csv', 'rt')
+		f_13 = open('source_2013.csv', 'rt')
+		print ('CSVs found, generating separate CSV files for tables.')
+		runScripts(f_11, f_12, f_13)
+	except IOError:
 		startTime = datetime.now()
 		print ('Not all CSVs found, generating separate CSV files for tables.')
 		url_2011 = 'https://raw.githubusercontent.com/ugiacoman/mapbox_data/master/source_2011.csv'
@@ -123,9 +123,9 @@ def main():
 		print("Downloading source_2012.csv")
 		file_2013 = download_file(url_2013, "source_2013.csv")
 		print("Downloading source_2013.csv")
-		f_11 = open(file_2011, 'rb')
-		f_12 = open(file_2012, 'rb')
-		f_13 = open(file_2013, 'rb')
+		f_11 = open(file_2011, 'rt')
+		f_12 = open(file_2012, 'rt')
+		f_13 = open(file_2013, 'rt')
 		runScripts(f_11, f_12, f_13)
 		print(datetime.now() - startTime)
 
