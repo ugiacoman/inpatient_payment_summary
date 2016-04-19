@@ -38,3 +38,8 @@ heroku pg:psql : pulls up live db on heroku
 heroku run python manage.py db upgrade --app intense-mapbox : after running local migrations, use remote upgrade
 
 ```
+
+## TODO
+1) Place all data of geoJSON
+2) Make storyboard introduction that scrolls with thingie
+3) Options for sifting through data (scroll-fly-to)
