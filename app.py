@@ -22,12 +22,19 @@ def sql_count(query):
 def sql_select(query):
 	sql = text(query)
 	result = db.engine.execute(sql)
-	names = []
+	features = []
 	years = []
+	dict_result = {}
+	crs = { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }
 	for row in result:
-		names.append(row[0])
-		years.append(row[1])
-	return jsonify(provider_id=str(names[0]),year=str(row[1]))
+		print(row['provider_id'],row['name'], row['longtiude'],row['latitude'])
+		feature = '{ "type": "Feature", "properties": { "Primary ID": "%s", "Secondary ID": "%s" }, "geometry": { "type": "Point", "coordinates": [ %f, %f ] } }' % (row['provider_id'],row['name'], row['longtiude'],row['latitude'])
+		features.append(feature)
+	print(features)		
+	result.close()
+	return jsonify(type="FeatureCollection",
+                   crs=crs,
+                   features=features)
 
 @app.route("/")
 def index():
@@ -40,7 +47,7 @@ def test_count():
 
 @app.route("/test-select")
 def test_select():
-	query = sql_select("select provider_id,year from diagnosis where procedure='039 - EXTRACRANIAL PROCEDURES W/O CC/MCC';")
+	query = sql_select("select location.provider_id,name,latitude,longtiude from location,provider where location.provider_id = provider.provider_id;")
 	return query	
 
 if __name__ == "__main__":

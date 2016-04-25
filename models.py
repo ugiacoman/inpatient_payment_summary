@@ -23,7 +23,7 @@ class Provider(db.Model):
 		self.is_hospital = is_hospital
 
 	def __repr__(self):
-		return self.provider_id
+		return '<provider_id %r>' % (self.provider_id)
 
 '''
 Diagnosis Table:
