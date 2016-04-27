@@ -30,13 +30,13 @@ def process_file(conn, table_name, file_object):
 
 def main():
 	print("\nEnter information below. (Note that Password is masked)")
-	dbname = raw_input("Database Name: ")
-	user = raw_input("Username: ")
-	password = getpass.getpass()
+	# dbname = raw_input("Database Name: ")
+	# user = raw_input("Username: ")
+	# password = getpass.getpass()
 
 	conn = None
 	#change to your own personal settings
-	conn = connect(dbname=dbname, user=user, password=password)
+	conn = connect(dbname="mapbox_db", user="uli", password="st")
 	conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 	cur = conn.cursor()
 	

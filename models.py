@@ -12,7 +12,6 @@ Provider Table:
 '''
 class Provider(db.Model):
 	provider_id = db.Column(db.Integer, primary_key=True)
-
 	name = db.Column(db.String(200))
 	is_hospital = db.Column(db.Boolean)
 
@@ -20,10 +19,7 @@ class Provider(db.Model):
 		self.provider_id = provider_id
 		self.name = name
 		self.is_hospital = is_hospital
-		self.is_hospital = is_hospital
 
-	def __repr__(self):
-		return '<provider_id %r>' % (self.provider_id)
 
 '''
 Diagnosis Table:
@@ -68,21 +64,20 @@ Location Table:
 '''
 class Location(db.Model):
 	provider_id = db.Column(db.Integer, primary_key=True)
-
 	city = db.Column(db.String(100))
 	street_address = db.Column(db.String(200))
 	state = db.Column(db.String(2))
 	zip_code = db.Column(db.Integer)
-	longtiude = db.Column(db.Numeric(precision=12, scale=8, asdecimal=True))
+	longitude = db.Column(db.Numeric(precision=12, scale=8, asdecimal=True))
 	latitude = db.Column(db.Numeric(precision=12, scale=8, asdecimal=True))
 
-	def __init__(self, provider_id, city, street_address, state, zip_code, longtiude, latitude):
+	def __init__(self, provider_id, city, street_address, state, zip_code, longitude, latitude):
 		self.provider_id = provider_id
 		self.city = city
 		self.street_address = street_address
 		self.state = state
 		self.zip_code = zip_code
-		self.longtiude = longtiude
+		self.longitude = longitude
 		self.latitude = latitude
 
 		
