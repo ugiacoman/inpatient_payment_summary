@@ -6,233 +6,471 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>    
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
 </head>
 <body>
+<div id='map'></div>
+
+<div class='map-overlay-container'>
+  <div class='map-overlay'>
+    <h2 id='location-title'></h2>
+    <p id='location-description'></p>
+    <!-- <small>Text credit: <a target='_blank' href='http://www.nycgo.com/neighborhoods'>nycgo.com</a></small> -->
+  </div>
+</div>
+
 
 <style>
-.map-overlay {
+body {
+    margin:0;
+    padding:0;
+    background:#fff;
+    font-family:'Montserrat',sans-serif;
+    font-size:12px;
+}
+ul {
+    margin:0;
+    padding:0;
+    text-decoration:none;
+    list-style:none;
+}
+li {
+    padding:0;
+    margin:0;
+}
+nav {
+    text-align:center;
+    width:100%;
+    position:relative;
+    height:auto;
+    overflow:hidden;
+    background:none;
+}
+nav ul {
+    text-align:center;
+}
+nav ul li {
+    display:inline-block;
+}
+nav ul li a {
+    color:#333;
+    display:inline-block;
+    padding:1em 3em;
+    text-decoration:none;
+    border-bottom:2px solid #fff;
+    transition-property:all .2s linear 0s;
+    -moz-transition:all .2s linear 0s;
+    -webkit-transition:all .2s linear 0s;
+    -o-transition:all .2s linear 0s;
+    font-size:16px;
+}
+nav ul li a:hover {
+    color: #34B484;
+}
+/*styling open close button*/
+.button {
+    display:inline;
+    position:absolute;
+    right:50px;
+    top:6px;
+    z-index:999;
+    font-size:30px;
+}
+.button a {
+    text-decoration:none;
+
+}
+.btn-open:after {
+    color:#fff;
+    content:"\f0c9";
+    font-family:"FontAwesome";
+    transition-property:all .2s linear 0s;
+    -moz-transition:all .2s linear 0s;
+    -webkit-transition:all .2s linear 0s;
+    -o-transition:all .2s linear 0s;
+}
+.btn-open:hover:after {
+    color:#34B484;
+}
+.btn-close:after {
+    color:#fff;
+    content:"\f00d";
+    font-family:"FontAwesome";
+    transition-property:all .2s linear 0s;
+    -moz-transition:all .2s linear 0s;
+    -webkit-transition:all .2s linear 0s;
+    -o-transition:all .2s linear 0s;
+}
+.btn-close:hover:after {
+    color: #34B484;
+}
+/*overlay*/
+.overlay {
+    display:none;
+    position:fixed;
+    top:0;
+    height:100%;
+    width:100%;
+    background:#333;
+    overflow:auto;
+    z-index:99;
+}
+.wrap {
+    color:#e9e9e9;
+    text-align:center;
+    max-width:90%;
+    margin:0 auto;
+}
+.wrap ul.wrap-nav {
+    border-bottom:1px solid #575757;
+    text-transform:capitalize;
+    padding:150px 0px 100px;
+}
+.wrap ul.wrap-nav li {
+    font-size:20px;
+    display:inline-block;
+    vertical-align:top;
+    width:24%;
+    position:relative;
+}
+.wrap ul.wrap-nav li a {
+    color:#34B484;
+    display:block;
+    padding:8px 0;
+    text-decoration:none;
+    transition-property:all .2s linear 0s;
+    -moz-transition:all .2s linear 0s;
+    -webkit-transition:all .2s linear 0s;
+    -o-transition:all .2s linear 0s;
+}
+.wrap ul.wrap-nav li a:hover {
+    color:#f0f0f0;
+}
+.wrap ul.wrap-nav ul {
+    padding:20px 0;
+}
+.wrap ul.wrap-nav ul li {
+    display:block;
+    font-size:13px;
+    width:100%;
+    color:#e9e9e9;
+}
+.wrap ul.wrap-nav ul li a {
+    color:#f0f0f0;
+}
+.wrap ul.wrap-nav ul li a:hover {
+    color:#34B484;
+}
+.social {
+    font-size:25px;
+    padding:20px;
+}
+.social p {
+    margin:0;
+    padding:20px 0 5px 0;
+    line-height:30px;
+    font-size:13px;
+}
+.social p a {
+    color:#34B484;
+    text-decoration:none;
+    margin:0;
+    padding:0;
+}
+.social-icon {
+    width:80px;
+    height:50px;
+    background:#e9e9e9;
+    color:#333;
+    display:inline-block;
+    margin:0 20px;
+    transition-property:all .2s linear 0s;
+    -moz-transition:all .2s linear 0s;
+    -webkit-transition:all .2s linear 0s;
+    -o-transition:all .2s linear 0s;
+}
+.social-icon:hover {
+    background:#34B484;
+    color:#f0f0f0;
+}
+.social-icon i {
+    margin-top:12px;
+}
+@media screen and (max-width:48em) {
+    .wrap ul.wrap-nav>li {
+        width:100%;
+        padding:20px 0;
+        border-bottom:1px solid #575757;
+    }
+    .wrap ul.wrap-nav {
+        padding:30px 0px 0px;
+    }
+    nav ul {
+        opacity:0;
+        visibility:hidden;
+    }
+    .social {
+        color:#c1c1c1;
+        font-size:25px;
+        padding:15px 0;
+    }
+    .social-icon {
+        width:100%;
+        height:50px;
+        background:#fff;
+        color:#333;
+        display:block;
+        margin:5px 0;
+    }
+}
+.content {
+    width:100%;
+    margin-top:200px;
+    font-size:20px;
+    color#333;
+    text-align: center;
+}
+.map-overlay-container {
     position: absolute;
     width: 25%;
     top: 0;
-    bottom: 0;
     left: 0;
     padding: 10px;
+    z-index: 1;
 }
 
-.map-overlay-inner {
+.map-overlay {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background-color: #fff;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-    border-radius: 3px;
-    max-height: 100%;
-    overflow: hidden;
-}
-
-.map-overlay-inner fieldset {
-    display: none;
-    background: #ddd;
-    border: none;
-    padding: 10px;
-    margin: 0;
-}
-
-.map-overlay-inner input {
-    display: block;
-    border: none;
-    width: 100%;
     border-radius: 3px;
     padding: 10px;
-    margin: 0;
+    box-shadow:0 1px 2px rgba(0,0,0,0.20);
 }
 
-.map-overlay-inner .listing {
-    overflow: auto;
-    max-height: 100%;
-}
-
-.map-overlay-inner .listing > * {
-    display: block;
-    padding: 5px 10px;
-    margin: 0;
-}
-
-.map-overlay-inner .listing a {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    color: #404;
-    text-decoration: none;
-}
-
-.map-overlay-inner .listing a:last-child {
-    border: none;
-}
-
-.map-overlay-inner .listing a:hover {
-    background: #f0f0f0;
+.map-overlay h2,
+.map-overlay p {
+    margin: 0 0 10px;
 }
 </style>
-
-<div id='map'></div>
-
-<div class='map-overlay'>
-    <div class='map-overlay-inner'>
-        <fieldset>
-            <input id='feature-filter' type='text' placeholder='Filter results by name' />
-        </fieldset>
-        <div id='feature-listing' class='listing'></div>
+<nav>
+<ul>
+    <li><a > </a></li>
+</ul>
+<div class="button">
+    <a class="btn-open" href="#"></a>
+</div>
+</nav>
+<div class="overlay">
+    <div class="wrap">
+        <ul class="wrap-nav">
+            <li><a href="#">About</a>
+            <ul>
+                <li><a href="#">About Company</a></li>
+                <li><a href="#">Designers</a></li>
+                <li><a href="#">Developers</a></li>
+                <li><a href="#">Pets</a></li>
+            </ul>
+            </li>
+            <li><a href="#">Services</a>
+            <ul>
+                <li><a href="https://www.google.hr/">Web Design</a></li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">Apps</a></li>
+                <li><a href="#">Graphic design</a></li>
+                <li><a href="#">Branding</a></li>
+            </ul>
+            </li>
+            <li><a href="#">Work</a>
+            <ul>
+                <li><a href="#">Web</a></li>
+                <li><a href="#">Graphic</a></li>
+                <li><a href="#">Apps</a></li>
+            </ul>
+            </li>
+        </ul>
+        <div class="social">
+            <a href="http://mario-loncarek.from.hr/">
+            <div class="social-icon">
+                <i class="fa fa-facebook"></i>
+            </div>
+            </a>
+            <a href="#">
+            <div class="social-icon">
+                <i class="fa fa-twitter"></i>
+            </div>
+            </a>
+            <a href="#">
+            <div class="social-icon">
+                <i class="fa fa-codepen"></i>
+            </div>
+            </a>
+            <a href="#">
+            <div class="social-icon">
+                <i class="fa fa-behance"></i>
+            </div>
+            </a>
+            <a href="#">
+            <div class="social-icon">
+                <i class="fa fa-dribbble"></i>
+            </div>
+            </a>
+            <p>
+                From: Zagreb, Croatia<br>
+                 Site: <a href="http://mario-loncarek.from.hr/">mario-loncarek.from.hr</a>
+            </p>
+        </div>
     </div>
 </div>
-
+<div class="content">
+     
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoidWdpYWNvbWFuIiwiYSI6ImNpbW8xdTUwejAwYXF1N2x5dmRydnpuZTIifQ.YF2LyOa-5Ookoi4_kpmCEg';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/ugiacoman/cinhop0me000damm704bfxnav',
-    center: [-98, 38.88],
-    maxZoom: 7,
-    minZoom: 1,
-    zoom: 4
+    center: [-74.0315, 40.6989],
+    maxZoom: 16,
+    minZoom: 9,
+    zoom: 9.68
 });
 
-// Holds visible airport features for filtering
-var locations = [];
+var title = document.getElementById('location-title');
+var description = document.getElementById('location-description');
 
-// Create a popup, but don't add it to the map yet.
-var popup = new mapboxgl.Popup({
-    closeButton: false
-});
-
-var filterEl = document.getElementById('feature-filter');
-var listingEl = document.getElementById('feature-listing');
-
-function renderListings(features) {
-    // Clear any existing listings
-    listingEl.innerHTML = '';
-    if (features.length) {
-        features.forEach(function(feature) {
-            var prop = feature.properties;
-            var item = document.createElement('a');
-            item.href = prop.wikipedia;
-            item.target = '_blank';
-            item.textContent = prop.name + ' (' + prop.provider_id + ')';
-            item.addEventListener('mouseover', function() {
-                // Highlight corresponding feature on the map
-                popup.setLngLat(feature.geometry.coordinates)
-                    .setText(feature.properties.name)
-                    .addTo(map);
-            });
-            listingEl.appendChild(item);
-        });
-
-        // Show the filter input
-        filterEl.parentNode.style.display = 'block';
-    } else {
-        var empty = document.createElement('p');
-        empty.textContent = 'Drag the map to populate results';
-        listingEl.appendChild(empty);
-
-        // Hide the filter input
-        filterEl.parentNode.style.display = 'none';
+var locations = [{
+    "id": "2",
+    "title": "Intense-Mapbox",
+    "description": "Medicare blah",
+    "camera": {
+        center: [-73.8709, 40.8255],
+        zoom: 12.21,
+        pitch: 50
     }
+}, {
+    "id": "3",
+    "title": "Brooklyn",
+    "description": "No matter how hip it looks on TV, NYC's most populous borough is best experienced in person. Read on to find out about live music, Prospect Park, Nets basketball and more.",
+    "camera": {
+        center: [-73.9499, 40.6260],
+        bearing: -8.9,
+        zoom: 11.68
+    }
+}, {
+    "id": "1",
+    "title": "Manhattan",
+    "description": "Even if you think you know Manhattan—its world-class museums, fine dining and unforgettable views—the borough always has something new and exciting in store.",
+    "camera": {
+        center: [-74.0070, 40.7437],
+        bearing: 25.3,
+        zoom: 11.5
+    }
+}, {
+    "id": "4",
+    "title": "Queens",
+    "description": "Taste food from around the globe, watch Mets baseball and US Open tennis, see cutting-edge art and more in one of the world's most diverse places.",
+    "camera": {
+        center: [-73.8432, 40.6923],
+        bearing: 36,
+        zoom: 11.37
+    }
+}, {
+    "id": "5",
+    "title": "Staten Island",
+    "description": "Take a free ferry ride to an island getaway filled with historic architecture, stunning views, gardens and many family-friendly attractions.",
+    "camera": {
+        center: [-74.1991, 40.5441],
+        bearing: 28.4,
+        zoom: 11.64
+    }
+}, {
+    "title": "Boroughs of new york",
+    "description": "New York City is made up of five boroughs: the Bronx, Brooklyn, Manhattan, Queens and Staten Island. Each one has enough attractions—and enough personality—to be a city all its own.",
+    "camera": {
+        center: [-74.0315, 40.6989],
+        zoom: 9.68,
+        bearing: 0,
+        pitch: 0
+    }
+}];
+
+function highlightBorough(code) {
+    // Only show the polygon feature that cooresponds to `borocode` in the data
+    map.setFilter('highlight', ["==", "borocode", code]);
 }
 
-function normalize(string) {
-    // return string.trim().toLowerCase();
-    return string.trim().toLowerCase();
+function playback(index) {
+    title.textContent = locations[index].title;
+    description.textContent = locations[index].description;
+
+    highlightBorough(locations[index].id ? locations[index].id : '');
+
+    // Animate the map position based on camera properties
+    map.flyTo(locations[index].camera);
+
+    map.once('moveend', function() {
+        // Duration the slide is on screen after interaction
+        window.setTimeout(function() {
+            // Increment index
+            index = (index + 1 === locations.length) ? 0 : index + 1;
+            playback(index);
+        }, 3000); // After callback, show the location for 3 seconds.
+    });
 }
+
+// Display the last title/description first
+title.textContent = locations[locations.length - 1].title;
+description.textContent = locations[locations.length - 1].description;
 
 map.on('load', function() {
 
-    // Add our vector tile source: World wide
-    // airports provided by Natural Earth
-    map.addSource('locations', {
+    // Polygon fill for each borough of new york city.
+    // Used to highlight when its borough is active.
+    map.addSource("boroughs", {
         "type": "vector",
-        "url": "mapbox://ugiacoman.04kmkjz8"
+        "url": "mapbox://mapbox.8ibmsn6u"
     });
 
     map.addLayer({
-        "id": "location",
-        "source": "locations",
-        "source-layer": "location", //title of tileset from mapbox
-        "type": "symbol",
-        "layout": {
-            "icon-image": "hospital-11",
-            "icon-padding": 0
+        "id": "highlight",
+        "type": "fill",
+        "source": "boroughs",
+        "source-layer": "original",
+        "paint": {
+            "fill-color": "#257673",
+            "fill-opacity": 0.25
         },
-        "filter": ["in", "name", ""]
-    });
+        "filter": ["==", "borocode", ""]
+    }, 'neighborhood_small_label'); // Place polygon under the neighborhood labels.
 
-    map.on('moveend', function() {
-        var features = map.querySourceFeatures('locations', {
-            sourceLayer: 'location'
-        });
-
-        if (features) {
-            // Populate features for the listing overlay.
-            renderListings(features);
-
-            // Clear the input container
-            filterEl.value = '';
-
-            // Store the current features in sn `airports` variable to
-            // later use for filtering on `keyup`.
-            locations = features;
-
-            // Set the filter to populate features into the layer.
-            map.setFilter('location', ['in', 'provider_id'].concat(features.map(function(feature) {
-                return feature.properties.provider_id;
-            })));
-        }
-    });
-
-    map.on('mousemove', function(e) {
-        var features = map.queryRenderedFeatures(e.point, {
-            layers: ['location']
-        });
-
-        // Change the cursor style as a UI indicator.
-        map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-
-        if (!features.length) {
-            popup.remove();
-            return;
-        }
-
-        var feature = features[0];
-
-        // Populate the popup and set its coordinates
-        // based on the feature found.
-        popup.setLngLat(feature.geometry.coordinates)
-            .setText(feature.properties.name)
-            .addTo(map);
-    });
-
-    filterEl.addEventListener('keyup', function(e) {
-        var value = normalize(e.target.value);
-
-        // Filter visible features that don't match the input value.
-        var filtered = locations.filter(function(feature) {
-            var name = normalize(String(feature.properties.name));
-            var code = normalize(String(feature.properties.provider_id));
-            return name.indexOf(value) > -1 || code.indexOf(value) > -1;
-        });
-
-        // Populate the sidebar with filtered results
-        renderListings(filtered);
-
-        // Set the filter to populate features into the layer.
-        map.setFilter('location', ['in', 'provider_id'].concat(filtered.map(function(feature) {
-            return feature.properties.provider_id;
-        })));
-    });
-
-    // Call this function on initialization
-    // passing an empty array to render an empty state
-    renderListings([]);
+    // Start the playback animation for each borough
+    playback(0);
 });
+</script>
+<script>
+    $(document).ready(function(){
+        $(".button a").click(function(){
+            $(".overlay").fadeToggle(200);
+           $(this).toggleClass('btn-open').toggleClass('btn-close');
+        });
+    });
+    $('.overlay').on('click', function(){
+        $(".overlay").fadeToggle(200);   
+        $(".button a").toggleClass('btn-open').toggleClass('btn-close');
+        open = false;
+    });
 </script>
 
 </body>
