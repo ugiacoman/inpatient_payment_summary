@@ -6,14 +6,11 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">  
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="/static/js/jcf.js"></script>
+    <script src="/static/js/jcf.select.js"></script>      
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -122,7 +119,7 @@ nav ul li a:hover {
     top:0;
     height:100%;
     width:100%;
-    background:#333;
+    background:rgba(1,1,1,.7);
     overflow:auto;
     z-index:99;
 }
@@ -274,68 +271,35 @@ nav ul li a:hover {
 <div class="overlay">
     <div class="wrap">
         <ul class="wrap-nav">
-            <li><a href="#">About</a>
+            <li><a href="#">Features</a>
             <ul>
-                <li><a href="#">About Company</a></li>
-                <li><a href="#">Designers</a></li>
-                <li><a href="#">Developers</a></li>
-                <li><a href="#">Pets</a></li>
-            </ul>
-            </li>
-            <li><a href="#">Services</a>
-            <ul>
-                <li><a href="https://www.google.hr/">Web Design</a></li>
-                <li><a href="#">Development</a></li>
-                <li><a href="#">Apps</a></li>
-                <li><a href="#">Graphic design</a></li>
-                <li><a href="#">Branding</a></li>
-            </ul>
-            </li>
-            <li><a href="#">Work</a>
-            <ul>
-                <li><a href="#">Web</a></li>
-                <li><a href="#">Graphic</a></li>
-                <li><a href="#">Apps</a></li>
+                <li><a href="/filter">Medical Locations</a></li>
+                <li><a href="/mincost/039_-_EXTRACRANIAL_PROCEDURES_W/O_CC/MCC">Development</a></li>
+            <div class="row">
+                <select data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}' id="procedures">
+                    <option value="v1">Option 1</option>
+                </select>
+            </div>                
+                <li><a href="#">Cost Heatmap</a></li>
             </ul>
             </li>
         </ul>
         <div class="social">
             <a href="http://mario-loncarek.from.hr/">
             <div class="social-icon">
-                <i class="fa fa-facebook"></i>
+                <i class="fa fa-github"></i>
             </div>
             </a>
-            <a href="#">
-            <div class="social-icon">
-                <i class="fa fa-twitter"></i>
-            </div>
-            </a>
-            <a href="#">
-            <div class="social-icon">
-                <i class="fa fa-codepen"></i>
-            </div>
-            </a>
-            <a href="#">
-            <div class="social-icon">
-                <i class="fa fa-behance"></i>
-            </div>
-            </a>
-            <a href="#">
-            <div class="social-icon">
-                <i class="fa fa-dribbble"></i>
-            </div>
-            </a>
-            <p>
+<!--             <p>
                 From: Zagreb, Croatia<br>
                  Site: <a href="http://mario-loncarek.from.hr/">mario-loncarek.from.hr</a>
-            </p>
+            </p> -->
         </div>
     </div>
 </div>
 <div class="content">
      
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoidWdpYWNvbWFuIiwiYSI6ImNpbW8xdTUwejAwYXF1N2x5dmRydnpuZTIifQ.YF2LyOa-5Ookoi4_kpmCEg';
 var map = new mapboxgl.Map({
@@ -352,8 +316,8 @@ var description = document.getElementById('location-description');
 
 var locations = [{
     "id": "2",
-    "title": "Intense-Mapbox",
-    "description": "Medicare blah",
+    "title": "Welcome to Intense-Mapbox!",
+    "description": "The purpose of this project is to provide estimates of the average cost of a particular of Diagnosis-related group (DRG). A DRG is a general type of common injury such as head trauma or a broken limb.",
     "camera": {
         center: [-73.8709, 40.8255],
         zoom: 12.21,
@@ -361,48 +325,21 @@ var locations = [{
     }
 }, {
     "id": "3",
-    "title": "Brooklyn",
-    "description": "No matter how hip it looks on TV, NYC's most populous borough is best experienced in person. Read on to find out about live music, Prospect Park, Nets basketball and more.",
+    "title": "How it works",
+    "description": "By using a widely recognized DRG, we can average medical costs at different hospitals all throughout the country, giving you the oppurtunity to see which hospital or medical center is the most cost efficient specific to your individual needs.",
     "camera": {
         center: [-73.9499, 40.6260],
         bearing: -8.9,
         zoom: 11.68
     }
 }, {
-    "id": "1",
-    "title": "Manhattan",
-    "description": "Even if you think you know Manhattan—its world-class museums, fine dining and unforgettable views—the borough always has something new and exciting in store.",
-    "camera": {
-        center: [-74.0070, 40.7437],
-        bearing: 25.3,
-        zoom: 11.5
-    }
-}, {
     "id": "4",
-    "title": "Queens",
-    "description": "Taste food from around the globe, watch Mets baseball and US Open tennis, see cutting-edge art and more in one of the world's most diverse places.",
+    "title": "Give it a Try!",
+    "description": "Use the menu button in the top right to view all options available to you.  Select which one you want to see and the map will do the rest!",
     "camera": {
         center: [-73.8432, 40.6923],
         bearing: 36,
         zoom: 11.37
-    }
-}, {
-    "id": "5",
-    "title": "Staten Island",
-    "description": "Take a free ferry ride to an island getaway filled with historic architecture, stunning views, gardens and many family-friendly attractions.",
-    "camera": {
-        center: [-74.1991, 40.5441],
-        bearing: 28.4,
-        zoom: 11.64
-    }
-}, {
-    "title": "Boroughs of new york",
-    "description": "New York City is made up of five boroughs: the Bronx, Brooklyn, Manhattan, Queens and Staten Island. Each one has enough attractions—and enough personality—to be a city all its own.",
-    "camera": {
-        center: [-74.0315, 40.6989],
-        zoom: 9.68,
-        bearing: 0,
-        pitch: 0
     }
 }];
 
@@ -465,6 +402,19 @@ map.on('load', function() {
             $(".overlay").fadeToggle(200);
            $(this).toggleClass('btn-open').toggleClass('btn-close');
         });
+    $.ajax({
+        type: 'GET',
+        url: '/procedures',
+        data: { get_param: 'value' },
+        dataType: 'json',
+        success: function (data) {
+            $.each(data, function(index, element){
+                $("#procedures").append('<option val="' + element + '">'+element+'</option>' );
+            });
+            jcf.replaceAll();
+
+        }
+    });        
     });
     $('.overlay').on('click', function(){
         $(".overlay").fadeToggle(200);   
