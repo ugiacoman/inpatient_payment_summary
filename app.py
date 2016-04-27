@@ -70,6 +70,7 @@ def filter():
 
 @app.route('/mincost/<drc>')
 def min_cost(drc):
+	drc = drc.replace("_","/")
 	drc = "039 - EXTRACRANIAL PROCEDURES W/O CC/MCC"
 	query = sql_geojson("select c.name, b.longitude, b.latitude, a.avg_total_payments from diagnosis a, location b, provider c where a.procedure = '039 - EXTRACRANIAL PROCEDURES W/O CC/MCC' and avg_total_payments = (select min(avg_total_payments) from diagnosis where diagnosis.procedure = '{}') and b.provider_id = a.provider_id and c.provider_id = a.provider_id;".format(drc))
 	return query
@@ -79,8 +80,8 @@ def procedures():
 	query = sql_json("select DISTINCT procedure from diagnosis")
 	return query	
 
-@app.route('/min')
-def min():
+@app.route('/min/<drc>')
+def min(drc):
 	return render_template('min_cost.html')	
 
 @app.route("/")

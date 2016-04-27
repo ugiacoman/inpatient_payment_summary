@@ -6,11 +6,14 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"> 
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-switch.css" rel="stylesheet"> 
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="/static/js/jcf.js"></script>
     <script src="/static/js/jcf.select.js"></script>      
+    <script src="/static/js/bootstrap-switch.js"></script>
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -273,14 +276,15 @@ nav ul li a:hover {
         <ul class="wrap-nav">
             <li><a href="#">Features</a>
             <ul>
-                <li><a href="/filter">Medical Locations</a></li>
-                <li><a href="/mincost/039_-_EXTRACRANIAL_PROCEDURES_W/O_CC/MCC">Development</a></li>
+                <li><a href="/filter"><h3>Medical Locations</h3></a></li>
+                <input data-on-Text="Min Cost" data-off-Text="Heat Map" data-on-color="info" data-off-color="success" type="checkbox" name="my-checkbox" checked>
+                <br><br>
             <div class="row">
                 <select data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}' id="procedures">
-                    <option value="v1">Option 1</option>
+                    <!--  -->
                 </select>
             </div>                
-                <li><a href="#">Cost Heatmap</a></li>
+                <button type="button" onclick="goMap()">Click Me!</button>
             </ul>
             </li>
         </ul>
@@ -301,6 +305,7 @@ nav ul li a:hover {
      
 </div>
 <script>
+$("[name='my-checkbox']").bootstrapSwitch();
 mapboxgl.accessToken = 'pk.eyJ1IjoidWdpYWNvbWFuIiwiYSI6ImNpbW8xdTUwejAwYXF1N2x5dmRydnpuZTIifQ.YF2LyOa-5Ookoi4_kpmCEg';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -416,11 +421,23 @@ map.on('load', function() {
         }
     });        
     });
-    $('.overlay').on('click', function(){
-        $(".overlay").fadeToggle(200);   
-        $(".button a").toggleClass('btn-open').toggleClass('btn-close');
-        open = false;
-    });
+    // $('.overlay').on('click', function(){
+    //     $(".overlay").fadeToggle(200);   
+    //     $(".button a").toggleClass('btn-open').toggleClass('btn-close');
+    //     open = false;
+    // });
+    $(".send").on('click', function(){
+        $(".text").addClass("active");
+        $(".send").addClass("active");
+        $(".loader").addClass("active");
+        $(".send").delay(1700).queue(function(){
+            $(this).addClass("finished").clearQueue();
+        });
+        
+        $(".done").delay(1600).queue(function(){
+            $(this).addClass("active").clearQueue();
+        });
+    })
 </script>
 
 </body>
