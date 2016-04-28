@@ -30,8 +30,8 @@ def sql_geojson(query):
 	dict_result = {}
 	for row in result:
 		primary_id = float(row['avg_total_payments'])
-		lat = float(row['longitude'])
-		lng = float(row['latitude'])
+		lat = float(row['latitude'])
+		lng = float(row['longitude'])
 		feature = { "type": "Feature", "properties": { "Primary ID": primary_id, "Secondary ID": primary_id }, "geometry": { "type": "Point", "coordinates": [ lng, lat ] } }
 		features.append(feature)	
 	result.close()
@@ -58,11 +58,11 @@ def sql_min(query):
 	sql = text(query)
 	result = db.engine.execute(sql)
 	for row in result:
-		state = 'US.' + row['state'].encode("utf-8")		
+		state = 'US.' + str(row['state'].encode("utf-8"))		
 		mincost = float(row['min'])
 		for feature in data:
 			if feature.properties["code_hasc"] == state:
-				feature.properties["name"] = "${:.2f}".format(mincost) 
+				feature.properties["name"] = "%.2f" % mincost 
 	
 
 
@@ -80,10 +80,11 @@ def sql_single_min(query):
 	result = db.engine.execute(sql)
 	min_hospital = ""
 	for row in result:
-		name = row['name'].encode("utf-8")		
+		name = row['name'].encode('UTF-8')		
 		state = row['state'].encode("utf-8")		
-		mincost = float(row['avg_total_payments'])
-		min_hospital = name + ": " + state + " ${:.2f}".format(mincost) 
+		mincost= float(row['avg_total_payments'])
+		min_hospital =  "%s %s %.2f" % (name.decode("utf-8") , state.decode("utf-8"), mincost)
+ 
 
 
 	return min_hospital
