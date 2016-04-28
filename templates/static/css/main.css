@@ -1,3 +1,10 @@
+.others {color:black}
+button{
+	background-color: #4CAEE5; /* Green */
+}
+.button {
+	color: #FAB;
+}
 /* select */
 .jcf-select {
 	display: inline-block;

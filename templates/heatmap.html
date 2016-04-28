@@ -20,6 +20,7 @@
     </style>
 </head>
 <body>
+
 <style>
 body {
     margin:0;
@@ -254,10 +255,10 @@ nav ul li a:hover {
 </style>
 <nav>
 <ul>
-    <li><a ></a></li>
+    <li><a > </a></li>
 </ul>
-<div id="info" class="button">
-    
+<div class="button">
+    <a class="btn-open" href="#"></a>
 </div>
 </nav>
 <div class="overlay">
@@ -293,85 +294,80 @@ nav ul li a:hover {
 <div class="content">
      
 </div>
-<style>
-.mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.marker-title {
-    font-weight: 700;
-}
-</style>
 <div id='map'></div>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoidWdpYWNvbWFuIiwiYSI6ImNpbW8xdTUwejAwYXF1N2x5dmRydnpuZTIifQ.YF2LyOa-5Ookoi4_kpmCEg';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/ugiacoman/cinhop0me000damm704bfxnav',
-    center: [-100.04, 38.907],
-    maxZoom: 12,
-    minZoom: 4,
-    zoom: 3
-});
-mapboxgl.accessToken = 'pk.eyJ1IjoidWdpYWNvbWFuIiwiYSI6ImNpbW8xdTUwejAwYXF1N2x5dmRydnpuZTIifQ.YF2LyOa-5Ookoi4_kpmCEg';
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/ugiacoman/cinhop0me000damm704bfxnav',
-    center: [-100.04, 38.907],
-    zoom: 3
+    center: [-103.59179687498357, 40.66995747013945],
+    zoom: 3,
 });
 
-map.on('load', function () {
+map.on('load', function(){
     var currentLocation = window.location.pathname;
-    var procedure = currentLocation.split("/")[2];     
-    // Add marker data as a new GeoJSON source.
-    map.addSource('states', {
-        'type': 'geojson',
-        'data': '/mincost/' + procedure,
+    var procedure = currentLocation.split("/")[2];   
+    // Add a new source from our GeoJSON data and set the
+    // 'cluster' option to true.
+    map.addSource("earthquakes", {
+        type: "geojson",
+        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+        'data': '/heat/' + procedure,
+        cluster: true,
+        clusterMaxZoom: 15, // Max zoom to cluster points on
+        clusterRadius: 20 // Use small cluster radius for the heatmap look
     });
 
-    // Add a layer showing the markers.
+    // Use the earthquakes source to create four layers:
+    // three for each cluster category, and one for non-clustered markers
+
+    // Each point range gets a different fill color.
+    var layers = [
+        [0, 'green'],
+        [20, 'orange'],
+        [200, 'red']
+    ];
+
+    layers.forEach(function (layer, i) {
+        map.addLayer({
+            "id": "cluster-" + i,
+            "type": "circle",
+            "source": "earthquakes",
+            "paint": {
+                "circle-color": layer[1],
+                "circle-radius": 70,
+                "circle-blur": 1 // blur the circles to get a heatmap look
+            },
+            "filter": i === layers.length - 1 ?
+                [">=", "point_count", layer[0]] :
+                ["all",
+                    [">=", "point_count", layer[0]],
+                    ["<", "point_count", layers[i + 1][0]]]
+        }, 'waterway-label');
+    });
+
     map.addLayer({
-        'id': 'states-layer',
-        'type': 'fill',
-        'source': 'states',
-        'paint': {
-            'fill-color': 'rgba(200, 100, 240, 0.4)',
-            'fill-outline-color': 'rgba(200, 100, 240, 1)'
-        }
-    });
-});
-
-
-// When a click event occurs near a marker icon, open a popup at the location of
-// the feature, with description HTML from its properties.
-map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['states-layer'] });
-    if (!features.length) {
-        return;
-    }
-
-    var feature = features[0];
-
-    var popup = new mapboxgl.Popup()
-        .setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.name)
-        .addTo(map);
-});
-
-// Use the same approach as above to indicate that the symbols are clickable
-// by changing the cursor style to 'pointer'.
-map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['states-layer'] });
-    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+        "id": "non-cluster-markers",
+        "type": "circle",
+        "source": "earthquakes",
+        "paint": {
+            "circle-color": 'rgba(0,255,0,0.5)',
+            "circle-radius": 20,
+            "circle-blur": 1
+        },
+        "filter": ["!=", "cluster", true]
+    }, 'waterway-label');
 });
 </script>
 <script>
-    var currentLocation = window.location.pathname;
-    var procedures = currentLocation.split("/")[2];    
     $("[name='heat']").bootstrapSwitch();
     $(document).ready(function(){
+        $(".button a").click(function(){
+            $(".overlay").fadeToggle(200);
+           $(this).toggleClass('btn-open').toggleClass('btn-close');
+        });
     $.ajax({
         type: 'GET',
         url: '/procedures',
@@ -384,21 +380,7 @@ map.on('mousemove', function (e) {
             jcf.replaceAll();
 
         }
-    });
-    $.ajax({
-        type: 'GET',
-        url: '/single_mincost/'+ procedures,
-        data: { get_param: 'value' },
-        dataType: 'text',
-        success: function (data) {
-            $("#info").append(data + '<a class="btn-open" href="#"></a>')
-            $(".button a").click(function(){
-            $(".overlay").fadeToggle(200);
-           $(this).toggleClass('btn-open').toggleClass('btn-close');
-        });
-
-        }
-    });             
+    });        
     });
     // $('.overlay').on('click', function(){
     //     $(".overlay").fadeToggle(200);   
@@ -447,7 +429,7 @@ function optChange() {
         window.location.href = '/min/'+valueSelected;
     }
 }
-      
+    
 </script>
 
 </body>

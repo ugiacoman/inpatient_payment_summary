@@ -30,10 +30,9 @@ def sql_geojson(query):
 	dict_result = {}
 	for row in result:
 		primary_id = float(row['avg_total_payments'])
-		secondary_id = row['name'].encode("utf-8")
 		lat = float(row['longitude'])
 		lng = float(row['latitude'])
-		feature = { "type": "Feature", "properties": { "Primary ID": secondary_id, "Secondary ID": primary_id }, "geometry": { "type": "Point", "coordinates": [ lng, lat ] } }
+		feature = { "type": "Feature", "properties": { "Primary ID": primary_id, "Secondary ID": primary_id }, "geometry": { "type": "Point", "coordinates": [ lng, lat ] } }
 		features.append(feature)	
 	result.close()
 	geojson_dict["type"] = "FeatureCollection"
@@ -59,13 +58,11 @@ def sql_min(query):
 	sql = text(query)
 	result = db.engine.execute(sql)
 	for row in result:
-		print(row)
 		state = 'US.' + row['state'].encode("utf-8")		
 		mincost = float(row['min'])
 		for feature in data:
-			print(feature.properties["code_hasc"], state)
 			if feature.properties["code_hasc"] == state:
-				feature.properties["name"] = mincost
+				feature.properties["name"] = "${:.2f}".format(mincost) 
 	
 
 
@@ -76,6 +73,20 @@ def sql_min(query):
 	data_json = json.dumps(saved, ensure_ascii=False)
 
 	return data_json
+
+def sql_single_min(query):
+	data = pygeoj.load('templates/static/data/states.geojson')
+	sql = text(query)
+	result = db.engine.execute(sql)
+	min_hospital = ""
+	for row in result:
+		name = row['name'].encode("utf-8")		
+		state = row['state'].encode("utf-8")		
+		mincost = float(row['avg_total_payments'])
+		min_hospital = name + ": " + state + " ${:.2f}".format(mincost) 
+
+
+	return min_hospital
 
 
 @app.route("/test-count")
@@ -99,6 +110,20 @@ def min_cost(drc):
 	query = sql_min("SELECT b.state, min(a.avg_total_payments) FROM diagnosis a, location b WHERE a.procedure = '{}' and b.provider_id = a.provider_id GROUP BY b.state;".format(drc))
 	return query
 
+@app.route('/single_mincost/<drc>')
+def single_min_cost(drc):
+	drc = drc.replace("_","/")
+	drc = drc.replace("&"," ")
+	query = sql_single_min("select c.name, a.avg_total_payments, b.state from diagnosis a, location b, provider c where a.procedure = '{}' and avg_total_payments = (select min(avg_total_payments) from diagnosis where diagnosis.procedure = '{}') and b.provider_id = a.provider_id and c.provider_id = a.provider_id;".format(drc, drc))
+	return query
+
+@app.route('/heat/<drc>')
+def heat(drc):
+	drc = drc.replace("_","/")
+	drc = drc.replace("&"," ")
+	query = sql_geojson("SELECT l.latitude, l.longitude, d.avg_total_payments FROM diagnosis d, location l WHERE d.provider_id = l.provider_id and d.procedure = '{}';".format(drc))
+	return query	
+
 @app.route('/procedures')
 def procedures():
 	query = sql_json("select DISTINCT procedure from diagnosis")
@@ -107,6 +132,10 @@ def procedures():
 @app.route('/min/<drc>')
 def min(drc):
 	return render_template('min_cost.html')	
+
+@app.route("/heatmap/<drc>")
+def heatmap(drc):
+    return render_template('heatmap.html')    
 
 @app.route("/")
 def index():
