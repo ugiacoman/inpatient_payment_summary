@@ -283,9 +283,9 @@ nav ul li a:hover {
                 <select data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}' id="procedures">
                     <!--  -->
                 </select>
-            </div>                
-                <button type="button" onclick="goMap()">Click Me!</button>
+            </div>                 
             </ul>
+            <button onclick="fuckinA()">Click me</button>
             </li>
         </ul>
         <div class="social">
@@ -438,6 +438,24 @@ map.on('load', function() {
             $(this).addClass("active").clearQueue();
         });
     })
+
+    $('select').change(function () {
+
+     });    
+
+    function replaceAll(str, find, replace) {
+      return str.replace(new RegExp(find, 'g'), replace);
+    }
+
+function fuckinA() {
+    var optionSelected = $('#procedures').find("option:selected");
+    var valueSelected  = optionSelected.val();
+    console.log(valueSelected);
+    valueSelected = replaceAll(valueSelected, " ", "&");
+    valueSelected = replaceAll(valueSelected, "/", "_");
+    window.location.href = '/min/'+valueSelected;
+        
+}    
 </script>
 
 </body>

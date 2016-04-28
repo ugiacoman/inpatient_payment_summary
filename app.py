@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask import render_template, send_from_directory
 from flask_sqlalchemy  import *
 from sqlalchemy import text
-import json
+import json, pygeoj
 
 app = Flask(__name__, static_folder='templates/static')
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -54,6 +54,30 @@ def sql_json(query):
 	result.close()
 	return jsonify(procedures)
 
+def sql_min(query):
+	data = pygeoj.load('templates/static/data/states.geojson')
+	sql = text(query)
+	result = db.engine.execute(sql)
+	for row in result:
+		print(row)
+		state = 'US.' + row['state'].encode("utf-8")		
+		mincost = float(row['min'])
+		for feature in data:
+			print(feature.properties["code_hasc"], state)
+			if feature.properties["code_hasc"] == state:
+				feature.properties["name"] = mincost
+	
+
+
+	data.save('templates/static/data/states.geojson')
+
+	with open('templates/static/data/states.geojson') as f:
+		saved = json.load(f)	
+	data_json = json.dumps(saved, ensure_ascii=False)
+
+	return data_json
+
+
 @app.route("/test-count")
 def test_count():
 	query = sql_count("select count(*) from diagnosis where procedure='039 - EXTRACRANIAL PROCEDURES W/O CC/MCC';")
@@ -71,8 +95,8 @@ def filter():
 @app.route('/mincost/<drc>')
 def min_cost(drc):
 	drc = drc.replace("_","/")
-	drc = "039 - EXTRACRANIAL PROCEDURES W/O CC/MCC"
-	query = sql_geojson("select c.name, b.longitude, b.latitude, a.avg_total_payments from diagnosis a, location b, provider c where a.procedure = '039 - EXTRACRANIAL PROCEDURES W/O CC/MCC' and avg_total_payments = (select min(avg_total_payments) from diagnosis where diagnosis.procedure = '{}') and b.provider_id = a.provider_id and c.provider_id = a.provider_id;".format(drc))
+	drc = drc.replace("&"," ")
+	query = sql_min("SELECT b.state, min(a.avg_total_payments) FROM diagnosis a, location b WHERE a.procedure = '{}' and b.provider_id = a.provider_id GROUP BY b.state;".format(drc))
 	return query
 
 @app.route('/procedures')

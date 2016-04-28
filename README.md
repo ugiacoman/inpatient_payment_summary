@@ -45,11 +45,9 @@ heroku run python manage.py db upgrade --app intense-mapbox : after running loca
 2. enable on mac wifi -> advanced -> socks (use port from ssh)
 
 ## TODO
-1) Place all data of geoJSON
-2) Make storyboard introduction that scrolls with thingie (nah)
-3) Options for sifting through data (scroll-fly-to) (nah)
-4) heatmap
-5) Show polygon information on click
+1. Place all data of geoJSON
+2. heatmap
+3. Show polygon information on click
 6) Add a feature so that if you want to find the cheapest state to get a medical procedure in ->
 7) talk about relationships (many to many)
 8) expand the er diagram for more constraints and show DDL
