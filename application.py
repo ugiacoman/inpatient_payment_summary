@@ -4,7 +4,7 @@ from flask_sqlalchemy  import *
 from sqlalchemy import text
 import json, pygeoj
 
-application = Flask(__name__, static_folder='templates/static')
+application = Flask(__name__, static_folder='static')
 application.config.from_object("config.DevelopmentConfig")
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config["CACHE_TYPE"] = "null"
