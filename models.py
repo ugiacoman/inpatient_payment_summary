@@ -1,4 +1,4 @@
-from app import db
+from application import db
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy import ForeignKey
 
