@@ -2,7 +2,7 @@
 
 Medical costs in the U.S. vary from state to state. We took inpatient data from the top 100 diagnoses in 2011 and mapped the data.
 
-[Production Server](http://intense-mapbox.herokuapp.com)
+[Production Server](http://intense-mapbox-dev.us-east-1.elasticbeanstalk.com/)
 
 
 ## Requirements
