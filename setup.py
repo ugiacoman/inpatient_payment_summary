@@ -36,7 +36,7 @@ def main():
 
 	conn = None
 	#change to your own personal settings
-	conn = connect(dbname="mapbox_db", user="uli", password="st")
+	conn = connect(dbname="mapbox_db", user="uli", password="viperdeath")
 	conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 	cur = conn.cursor()
 	
