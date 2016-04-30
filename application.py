@@ -54,7 +54,7 @@ def sql_json(query):
 	return jsonify(procedures)
 
 def sql_min(query):
-	data = pygeoj.load('templates/static/data/states.geojson')
+	data = pygeoj.load('static/data/states.geojson')
 	sql = text(query)
 	result = db.engine.execute(sql)
 	for row in result:
@@ -66,16 +66,16 @@ def sql_min(query):
 	
 
 
-	data.save('templates/static/data/states.geojson')
+	data.save('static/data/states.geojson')
 
-	with open('templates/static/data/states.geojson') as f:
+	with open('static/data/states.geojson') as f:
 		saved = json.load(f)	
 	data_json = json.dumps(saved, ensure_ascii=False)
 
 	return data_json
 
 def sql_single_min(query):
-	data = pygeoj.load('templates/static/data/states.geojson')
+	data = pygeoj.load('static/data/states.geojson')
 	sql = text(query)
 	result = db.engine.execute(sql)
 	min_hospital = ""
