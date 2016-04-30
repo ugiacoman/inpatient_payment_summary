@@ -2,7 +2,7 @@ from psycopg2 import connect
 import sys
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
-from app import db
+from application import db
 import getpass
 
 
@@ -45,7 +45,7 @@ def main():
 	loc_file = open("Location.csv")
 	diag_file = open("Diagnosis.csv")
 	try:
-		delete(conn)
+		# delete(conn)
 		process_file(conn, 'provider', prov_file)
 		process_file(conn, 'location', loc_file)
 		process_file(conn, 'diagnosis', diag_file)

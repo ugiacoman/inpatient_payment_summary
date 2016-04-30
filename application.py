@@ -4,11 +4,11 @@ from flask_sqlalchemy  import *
 from sqlalchemy import text
 import json, pygeoj
 
-app = Flask(__name__, static_folder='templates/static')
-app.config.from_object("config.DevelopmentConfig")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["CACHE_TYPE"] = "null"
-db = SQLAlchemy(app)
+application = Flask(__name__, static_folder='templates/static')
+application.config.from_object("config.DevelopmentConfig")
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+application.config["CACHE_TYPE"] = "null"
+db = SQLAlchemy(application)
 
 from models import *
 
@@ -18,7 +18,7 @@ def sql_count(query):
 	result = db.engine.execute(sql)
 	names = []
 	for row in result:
-		names.append(row[0])
+		names.applicationend(row[0])
 	return jsonify(count=str(names[0]))
 
 def sql_geojson(query):
@@ -90,57 +90,57 @@ def sql_single_min(query):
 	return min_hospital
 
 
-@app.route("/test-count")
+@application.route("/test-count")
 def test_count():
 	query = sql_count("select count(*) from diagnosis where procedure='039 - EXTRACRANIAL PROCEDURES W/O CC/MCC';")
 	return query
 
-@app.route("/all-locations")
+@application.route("/all-locations")
 def test_select():
 	query = sql_select("select location.provider_id,name,latitude,longitude from location,provider where location.provider_id = provider.provider_id;")
 	return query
 
-@app.route("/filter")
+@application.route("/filter")
 def filter():
     return render_template('filter.html')
 
-@app.route('/mincost/<drc>')
+@application.route('/mincost/<drc>')
 def min_cost(drc):
 	drc = drc.replace("_","/")
 	drc = drc.replace("&"," ")
 	query = sql_min("SELECT b.state, min(a.avg_total_payments) FROM diagnosis a, location b WHERE a.procedure = '{}' and b.provider_id = a.provider_id GROUP BY b.state;".format(drc))
 	return query
 
-@app.route('/single_mincost/<drc>')
+@application.route('/single_mincost/<drc>')
 def single_min_cost(drc):
 	drc = drc.replace("_","/")
 	drc = drc.replace("&"," ")
 	query = sql_single_min("select c.name, a.avg_total_payments, b.state from diagnosis a, location b, provider c where a.procedure = '{}' and avg_total_payments = (select min(avg_total_payments) from diagnosis where diagnosis.procedure = '{}') and b.provider_id = a.provider_id and c.provider_id = a.provider_id;".format(drc, drc))
 	return query
 
-@app.route('/heat/<drc>')
+@application.route('/heat/<drc>')
 def heat(drc):
 	drc = drc.replace("_","/")
 	drc = drc.replace("&"," ")
 	query = sql_geojson("SELECT l.latitude, l.longitude, d.avg_total_payments FROM diagnosis d, location l WHERE d.provider_id = l.provider_id and d.procedure = '{}';".format(drc))
 	return query	
 
-@app.route('/procedures')
+@application.route('/procedures')
 def procedures():
 	query = sql_json("select DISTINCT procedure from diagnosis")
 	return query	
 
-@app.route('/min/<drc>')
+@application.route('/min/<drc>')
 def min(drc):
 	return render_template('min_cost.html')	
 
-@app.route("/heatmap/<drc>")
+@application.route("/heatmap/<drc>")
 def heatmap(drc):
     return render_template('heatmap.html')    
 
-@app.route("/")
+@application.route("/")
 def index():
     return render_template('index.html')    	
 
 if __name__ == "__main__":
-    app.run(port=12000, debug=True, host= '0.0.0.0')
+    application.run(port=12000, debug=True, host= '0.0.0.0')
