@@ -310,9 +310,9 @@ map.on('load', function(){
     var procedure = currentLocation.split("/")[2];   
     // Add a new source from our GeoJSON data and set the
     // 'cluster' option to true.
-    map.addSource("earthquakes", {
+    map.addSource("procedures", {
         type: "geojson",
-        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+        // Point to GeoJSON data. This example visualizes all M1.0+ procedures
         // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
         'data': '/heat/' + procedure,
         cluster: true,
@@ -320,7 +320,7 @@ map.on('load', function(){
         clusterRadius: 20 // Use small cluster radius for the heatmap look
     });
 
-    // Use the earthquakes source to create four layers:
+    // Use the procedures source to create four layers:
     // three for each cluster category, and one for non-clustered markers
 
     // Each point range gets a different fill color.
@@ -334,7 +334,7 @@ map.on('load', function(){
         map.addLayer({
             "id": "cluster-" + i,
             "type": "circle",
-            "source": "earthquakes",
+            "source": "procedures",
             "paint": {
                 "circle-color": layer[1],
                 "circle-radius": 70,
@@ -351,7 +351,7 @@ map.on('load', function(){
     map.addLayer({
         "id": "non-cluster-markers",
         "type": "circle",
-        "source": "earthquakes",
+        "source": "procedures",
         "paint": {
             "circle-color": 'rgba(0,255,0,0.5)',
             "circle-radius": 20,
