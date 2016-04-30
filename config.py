@@ -6,7 +6,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = "mapboxdb.cicobqzqqqxn.us-east-1.rds.amazonaws.com:5432"
 
 
 class ProductionConfig(Config):
